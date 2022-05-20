@@ -14,9 +14,9 @@ import {
   UPDATE_USER_ERROR,
   HANDLE_CHANGE,
   CLEAR_VALUES,
-  CREATE_JOB_BEGIN,
-  CREATE_JOB_SUCCESS,
-  CREATE_JOB_ERROR,
+  CREATE_INTERVIEW_BEGIN,
+  CREATE_INTERVIEW_SUCCESS,
+  CREATE_INTERVIEW_ERROR,
   GET_JOBS_BEGIN,
   GET_JOBS_SUCCESS,
   SET_EDIT_JOB,
@@ -57,13 +57,25 @@ const initialState = {
   showSideBar:false,
   isEditing:false,
   editJobId:'',
-  position:'',
-  company:'',
-  jobLocation: userLocation || "",
-  jobTypeOption:['full-time','part-time','remote','internship'],
-  jobType:'full-time',
-  statusOptions:['interview','decline','pending'],
+  studentFirstName:'',
+  studentSecondName:'',
+
+  logicMark:0,
+  englishMark:0,
+  codingMark:0,
+  englishTest:0,
+  result:0,
+
+  statusOptions:['pass','failed','retake','pending'],
   status:"pending",
+
+  interviewLocation: userLocation || "",
+  locationOption:['Amman','Irbid'],
+
+  courseTypeOptions:['javascript','python','dotnet','java','cybersecurity','datavisualization','mobiledevelopment','others'],
+  courseType:'others',
+
+  note:"",
   //Get all jobs
   jobs:[],
   totalJobs:0,
@@ -76,7 +88,6 @@ const initialState = {
   searchType:'all',
   sort:'latest',
   sortOptions:['latest','oldest','a-z','z-a'],
-  locationOption:['Amman','Irbid']
 };
 
 const AppContext = React.createContext();
@@ -183,18 +194,38 @@ const AppProvider = ({ children }) => {
     dispatch({type:CLEAR_VALUES});
   }
 
-  const createJob=async()=>{
-    dispatch({type:CREATE_JOB_BEGIN});
+  const createInterview=async()=>{
+    dispatch({type:CREATE_INTERVIEW_BEGIN});
     try {
-      const{position,company,jobLocation,jobType,status}=state;
-      await authFetch.post('/jobs',{
-        position,company,jobLocation,jobType,status
+      const{studentFirstName,
+        studentSecondName,
+        logicMark,
+        englishMark,
+        codingMark,
+        englishTest,
+        result,
+        status,
+        interviewLocation,
+        courseType,
+        note}=state;
+      await authFetch.post('/interviews',{
+        studentFirstName,
+        studentSecondName,
+        logicMark,
+        englishMark,
+        codingMark,
+        englishTest,
+        result,
+        status,
+        interviewLocation,
+        courseType,
+        note
       })
-      dispatch({type:CREATE_JOB_SUCCESS});
+      dispatch({type:CREATE_INTERVIEW_SUCCESS});
       dispatch({type:CLEAR_VALUES})
     } catch (error) {
       if(error.response.status===401) return;
-      dispatch({type:CREATE_JOB_ERROR,payload:{msg:error.response.data.msg}})
+      dispatch({type:CREATE_INTERVIEW_ERROR,payload:{msg:error.response.data.msg}})
     }
     clearAlert(); 
   }
@@ -270,7 +301,7 @@ const AppProvider = ({ children }) => {
         monthlyApplication:data.monthlyApplication
       }})
     } catch (error) {
-      logoutUser();
+      // logoutUser();
     }
     clearAlert();
   }
@@ -293,7 +324,7 @@ const changePage=(pages)=>{
         updateUser,
         handleChange,
         clearValues,
-        createJob,
+        createInterview,
         getJobs,
         setEditJob,
         deleteJob,

@@ -4,13 +4,14 @@ import {
   BadRequestError,
   NotFoundError,
   unauthenticatedError,
+  NotAcceptable
 } from "../errors/index.js";
 import checkPermissions from "../utils/checkPermission.js";
 import mongoose from "mongoose";
 import moment from "moment";
 import User from "../models/User.js";
 
-const createInteview = async (req, res) => {
+const createInterview = async (req, res) => {
   const {
     studentFirstName,
     studentSecondName,
@@ -18,6 +19,7 @@ const createInteview = async (req, res) => {
     englishMark,
     codingMark,
     status,
+    englishTest,
     interviewLocation,
   } = req.body;
 
@@ -28,12 +30,26 @@ const createInteview = async (req, res) => {
     !englishMark ||
     !codingMark ||
     !status ||
-    !interviewLocation
+    !interviewLocation||
+    !status ||
+    !englishTest
   ) {
     throw new BadRequestError("Please Provide All Values");
   }
 
+  if((logicMark>10||logicMark<0)
+  ||
+  (codingMark>10||codingMark<0)||
+  (englishMark>10||englishMark<0)||
+  (englishTest>50||englishTest<0)
+  ){
+    throw new NotAcceptable("Please Provide Valid Marks Logic,Coding,English Between 10-0 and English Test Between 50-0")
+  }
+
   req.body.createdBy = req.user.userId;
+
+
+
 
   let finalResult = Math.ceil(
     (Number(logicMark) + Number(englishMark) + Number(codingMark)) / 3
@@ -165,23 +181,58 @@ const getAllInterview = async (req, res) => {
     .json({ interviews, totalInterviews, numberOfPages });
 };
 const updateJob = async (req, res) => {
-  const { id: jobId } = req.params;
-  const { company, position } = req.body;
+  const { id: interivewId } = req.params;
+  const {     
+    studentFirstName,
+    studentSecondName,
+    logicMark,
+    englishMark,
+    codingMark,
+    status,
+    interviewLocation,
+    englishTest,
+    } = req.body;
 
-  if (!position || !company) {
+  if (    
+    !studentFirstName ||
+    !studentSecondName ||
+    !logicMark ||
+    !englishMark ||
+    !codingMark ||
+    !status ||
+    !interviewLocation||
+    !status ||
+    !englishTest) {
     throw new BadRequestError("Please Provide All Values");
   }
 
-  const job = await Interviews.findOne({ _id: jobId });
+  const interview = await Interviews.findOne({ _id: interivewId });
 
-  if (!job) {
-    throw new NotFoundError(`No job with id : ${jobId}`);
+  if (!interview) {
+    throw new NotFoundError(`No interview with id : ${interivewId}`);
   }
-  //check permission
-  checkPermissions(req.user, job.createdBy);
 
-  const updatedJob = await Interviews.findOneAndUpdate(
-    { _id: jobId },
+  if(Number(logicMark)>10&&Number(logicMark)<10||
+  Number(codingMark)>10&&Number(codingMark)<10||
+  Number(englishMark)>10&&Number(englishMark)<10||
+  Number(englishTest)>50&&Number(englishTest)<50
+  ){
+    throw new NotAcceptable("Please provide valid marks")
+  }
+
+  let finalResult = Math.ceil(
+    (Number(logicMark) + Number(englishMark) + Number(codingMark)) / 3
+  );
+
+  if (finalResult >= 6) {
+    req.body.status = "pass";
+  }
+
+  //check permission
+  checkPermissions(req.user, interview.createdBy);
+
+  const updatedInterview = await Interviews.findOneAndUpdate(
+    { _id: interivewId },
     req.body,
     {
       new: true,
@@ -189,22 +240,22 @@ const updateJob = async (req, res) => {
     }
   );
 
-  res.status(StatusCodes.OK).json({ updatedJob });
+  res.status(StatusCodes.OK).json({ updatedInterview });
 };
 
-const deleteJob = async (req, res) => {
-  const { id: jobId } = req.params;
+const deleteInterview = async (req, res) => {
+  const { id: interviewId } = req.params;
 
-  const job = await Interviews.findById({ _id: jobId });
+  const interview = await Interviews.findById({ _id: interviewId });
 
-  if (!job) {
-    throw new NotFoundError(`No job with id : ${jobId}`);
+  if (!interview) {
+    throw new NotFoundError(`No job with id : ${interviewId}`);
   }
 
   //check permission
-  checkPermissions(req.user, job.createdBy);
+  checkPermissions(req.user, interview.createdBy);
 
-  await job.remove();
+  await interview.remove();
 
   res.status(StatusCodes.OK).json({ msg: "Job deleted successfully" });
 };
@@ -336,9 +387,9 @@ const showStats = async (req, res) => {
 
 export {
   getAllInterview,
-  createInteview,
+  createInterview,
   getOwnInterview,
-  deleteJob,
+  deleteInterview,
   updateJob,
   showStats,
 };

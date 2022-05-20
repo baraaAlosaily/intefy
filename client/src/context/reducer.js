@@ -10,9 +10,9 @@ import { CLEAR_ALERT,
     UPDATE_USER_ERROR,
     HANDLE_CHANGE,
     CLEAR_VALUES,
-    CREATE_JOB_BEGIN,
-    CREATE_JOB_SUCCESS,
-    CREATE_JOB_ERROR,
+    CREATE_INTERVIEW_BEGIN,
+    CREATE_INTERVIEW_SUCCESS,
+    CREATE_INTERVIEW_ERROR,
     GET_JOBS_BEGIN,
     GET_JOBS_SUCCESS,
     SET_EDIT_JOB,
@@ -126,11 +126,16 @@ const reducer=(state,action)=>{
         const initialState={
             isEditing:false,
             editJobId:'',
-            position:'',
-            company:'',
-            jobLocation: state.userLocation,
-            jobType:'full-time',
-            status:"pending"
+            studentFirstName:'',
+            studentSecondName:'',
+            logicMark:0,
+            englishMark:0,
+            codingMark:0,
+            englishTest:0,
+            status:'pending',
+            interviewLocation:'Amman',
+            courseType:'others',
+            note:''
         }
         return {
             ...state,
@@ -145,11 +150,11 @@ const reducer=(state,action)=>{
         } 
     }
 
-    if(action.type===CREATE_JOB_BEGIN){
+    if(action.type===CREATE_INTERVIEW_BEGIN){
         return {...state,isLoading:true}
     }
 
-    if(action.type===CREATE_JOB_SUCCESS){
+    if(action.type===CREATE_INTERVIEW_SUCCESS){
         return {
             ...state,
             isLoading:false,
@@ -158,7 +163,7 @@ const reducer=(state,action)=>{
             alertText: 'New Job Created'
         } 
     }
-    if(action.type===CREATE_JOB_ERROR){
+    if(action.type===CREATE_INTERVIEW_ERROR){
         return {
             ...state,
             isLoading:false,

@@ -9,6 +9,7 @@ import SearchContainer from "./SearchContainer";
 import JobsContainer from "./JobsContainer";
 import ChartsContainer from "./ChartsContainer";
 import StatsContainer from "./StatsContainer";
+import FormRowTextArea from "./FormRowTextArea";
 
 export {
     Logo,
@@ -21,5 +22,6 @@ export {
     SearchContainer,
     JobsContainer,
     StatsContainer,
-    ChartsContainer
+    ChartsContainer,
+    FormRowTextArea
 }

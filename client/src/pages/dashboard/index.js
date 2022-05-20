@@ -1,4 +1,4 @@
-import AddJob from "./AddJob";
+import AddInterview from "./AddInterview";
 import AllJobs from "./AllJobs";
 import Profile from "./Profile";
 import SharedLayout from "./SharedLayout";
@@ -6,7 +6,7 @@ import Stats from "./Stats";
 import ProtectedLayout from "../ProtectedLayout";
 
 export{
-    AddJob,
+    AddInterview,
     AllJobs,
     Profile,
     SharedLayout,

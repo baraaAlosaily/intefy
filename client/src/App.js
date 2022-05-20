@@ -1,7 +1,7 @@
 import {BrowserRouter,Routes,Route} from "react-router-dom"
 import { Landing,Register,Error } from "./pages";
 import {
-  AddJob,
+  AddInterview,
   AllJobs,
   Profile,
   SharedLayout,
@@ -20,7 +20,7 @@ const App=()=> {
     }>
       <Route index element={<Stats/>}/>
       <Route path="all-jobs" element={<AllJobs/>}/>
-      <Route path="add-jobs" element={<AddJob/>}/>
+      <Route path="add-interview" element={<AddInterview/>}/>
       <Route path="profile" element={<Profile/>}/>
     </Route>
     <Route path="/register" element={<Register/>} />

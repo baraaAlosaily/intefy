@@ -1,11 +1,11 @@
 import React,{useState} from 'react';
-import { FormRow,Alert } from '../../components';
+import { FormRow,Alert,FormRowSelect } from '../../components';
 import { useAppContext } from '../../context/appContext';
 import Wrapper from '../../assets/wrappers/DashboardFormPage';
 
 
 const Profile = () => {
-  const {user,showAlert,displayAlert,updateUser,isLoading}=useAppContext();
+  const {user,showAlert,displayAlert,updateUser,isLoading,locationOption}=useAppContext();
 
   const [name, setName] = useState(user?.name);
   const [lastName, setLastName] = useState(user?.lastName);
@@ -41,11 +41,13 @@ const Profile = () => {
          labelText="Email"
          value={email}
          handleChange={(e)=>setEmail(e.target.value)}/>
-        <FormRow type="text"
-         name="location" 
-         value={location}
-         labelText="Location"
-         handleChange={(e)=>setLocation(e.target.value)}/>
+          <FormRowSelect
+          value={location}
+          handleChange={(e)=>setLocation(e.target.value)}
+          Options={locationOption}
+          labelText="location"
+          name="location"
+        />
          <button className='btn btn-block' type='submit' disabled={isLoading}>
            {isLoading?'Please Wait...':'Save Changes'}
          </button>
