@@ -8,16 +8,26 @@ import PageBtnContainer from './PageBtnContainer'
 
 
 const JobsContainer = () => {
-    const {getJobs,jobs,isLoading,pages,totalJobs,search,searchStatus,searchType,sort,numberOfPages}=useAppContext();
+    const {getInterviews,interviews,isLoading,pages,totalInterviews,search,searchStatus,courseType,locationType,sort,numberOfPages,
+        adminInterviews,
+        adminTotalInterviews,
+        adminNumberOfPages,
+        getAdminInterviews,
+        user
+    }=useAppContext();
     useEffect(() => {
-        getJobs();
-    }, [search,searchStatus,searchType,sort,pages])
+        if(user&&user.isAdmin){
+            getAdminInterviews();
+        }else{
+            getInterviews();
+        }
+    }, [search,searchStatus,courseType,locationType,sort,pages])
 
     if(isLoading){
         return <Loading center/>
     }
 
-    if(jobs.length===0){
+    if(user&&user.isAdmin?adminInterviews.length===0:interviews.length===0){
         return (
             <Wrapper>
                 <h2>No jobs to display...</h2>
@@ -27,13 +37,15 @@ const JobsContainer = () => {
     
   return (
       <Wrapper>
-         <h5>{totalJobs} job{jobs.length>1 && 's'} found</h5>
+         <h5>{(user&&user.isAdmin)?adminTotalInterviews:totalInterviews} interview{((user&&user.isAdmin)?adminInterviews.length:interviews.length)>1 && 's'} found</h5>
          <div className="jobs">
-             {jobs.map((job)=>{
-                 return <Job key={job._id}{...job}/>
+             {user&&user.isAdmin?adminInterviews.map((interview)=>{
+                 return <Job key={interview._id}{...interview}/>
+             }):interviews.map((interview)=>{
+                 return <Job key={interview._id}{...interview}/>
              })}
          </div>
-        {numberOfPages>1&&<PageBtnContainer/>} 
+        {(((user&&user.isAdmin)?adminNumberOfPages:numberOfPages)>1)&&<PageBtnContainer/>} 
       </Wrapper>
   )
 }

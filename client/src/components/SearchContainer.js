@@ -7,11 +7,13 @@ const SearchContainer = () => {
   const {
     search,
     searchStatus,
-    searchType,
+    courseType,
+    courseTypeOptions,
+    locationType,
+    locationOption,
     sort,
     sortOptions,
     isLoading,
-    jobTypeOption,
     statusOptions,
     handleChange,
     clearFilter,
@@ -49,10 +51,17 @@ const SearchContainer = () => {
          />
          <FormRowSelect
          labelText='job type'
-         name='searchType'
-         value={searchType}
+         name='courseType'
+         value={courseType}
          handleChange={handleSearch}
-         Options={['all',...jobTypeOption]}
+         Options={['all',...courseTypeOptions]}
+         />
+         <FormRowSelect
+         labelText='job type'
+         name='locationType'
+         value={locationType}
+         handleChange={handleSearch}
+         Options={['all',...locationOption]}
          />
          <FormRowSelect
          labelText='sort by'

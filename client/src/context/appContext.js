@@ -1,4 +1,4 @@
-import React, { useReducer, useContext } from "react";
+import React, { useReducer, useContext,useEffect } from "react";
 import axios from "axios";
 import reducer from "./reducer";
 import {
@@ -17,8 +17,8 @@ import {
   CREATE_INTERVIEW_BEGIN,
   CREATE_INTERVIEW_SUCCESS,
   CREATE_INTERVIEW_ERROR,
-  GET_JOBS_BEGIN,
-  GET_JOBS_SUCCESS,
+  GET_INTERVIEWS_BEGIN,
+  GET_INTERVIEWS_SUCCESS,
   SET_EDIT_JOB,
   DELETE_JOB_BEGIN,
   EDIT_JOB_BEGIN,
@@ -27,7 +27,9 @@ import {
   SHOW_STATS_BEGIN,
   SHOW_STATS_SUCCESS,
   CLEAR_FILTER,
-  CHANGE_PAGE
+  CHANGE_PAGE,
+  GET_ADMIN_INTERVIEWS_BEGIN,
+  GET_ADMIN_INTERVIEWS_SUCCESS
 } from "./action";
 
 const addUserToLocalStorage = ({ user, token, location }) => {
@@ -77,15 +79,19 @@ const initialState = {
 
   note:"",
   //Get all jobs
-  jobs:[],
-  totalJobs:0,
+  interviews:[],
+  totalInterviews:0,
   numberOfPages:1,
+  adminInterviews:[],
+  adminTotalInterviews:0,
+  adminNumberOfPages:1,
   pages:1,
   stats:{},
   monthlyApplication:[],
   search:"",
   searchStatus:'all',
-  searchType:'all',
+  courseType:'all',
+  locationType:'all',
   sort:'latest',
   sortOptions:['latest','oldest','a-z','z-a'],
 };
@@ -230,22 +236,56 @@ const AppProvider = ({ children }) => {
     clearAlert(); 
   }
 
-  const getJobs=async()=>{
-    const {search,searchStatus,searchType,sort,pages}=state;
+  const getInterviews=async()=>{
+    const {search,
+      searchStatus,
+      courseType,
+      locationType,
+      sort,
+      pages}=state;
 
-    let url=`/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}&page=${pages}`;
+    let url=`/interviews?status=${searchStatus}&interviewLocation=${locationType}&courseType=${courseType}&sort=${sort}&page=${pages}`;
 
     if(search){
       url+=`&search=${search}`
     }
-    dispatch({type:GET_JOBS_BEGIN})
+    dispatch({type:GET_INTERVIEWS_BEGIN})
     try {
       const {data}=await authFetch(url);
-      const{jobs,totalJobs,numberOfPages}=data
-      dispatch({type:GET_JOBS_SUCCESS,payload:{
-        jobs,
-        totalJobs,
+      const{interviews,totalInterviews,numberOfPages}=data
+      dispatch({type:GET_INTERVIEWS_SUCCESS,payload:{
+        interviews,
+        totalInterviews,
         numberOfPages
+      }})
+
+    } catch (error) {
+      console.log(error.response);
+    }
+    clearAlert();
+  }
+
+  const getAdminInterviews=async()=>{
+    const {search,
+      searchStatus,
+      courseType,
+      locationType,
+      sort,
+      pages}=state;
+
+    let url=`/interviews/all?status=${searchStatus}&interviewLocation=${locationType}&courseType=${courseType}&sort=${sort}&page=${pages}`;
+
+    if(search){
+      url+=`&search=${search}`
+    }
+    dispatch({type:GET_ADMIN_INTERVIEWS_BEGIN})
+    try {
+      const {data}=await authFetch(url);
+      const{interviews,totalInterviews,numberOfPages}=data
+      dispatch({type:GET_ADMIN_INTERVIEWS_SUCCESS,payload:{
+        adminInterviews:interviews,
+        adminTotalInterviews:totalInterviews,
+        adminNumberOfPages:numberOfPages
       }})
 
     } catch (error) {
@@ -261,8 +301,8 @@ const AppProvider = ({ children }) => {
     dispatch({type:DELETE_JOB_BEGIN});
 
     try {
-      await authFetch.delete(`/jobs/${id}`);
-      getJobs()
+      await authFetch.delete(`/interviews/${id}`);
+      getInterviews();
     } catch (error) {
       // logoutUser();
     }
@@ -270,9 +310,29 @@ const AppProvider = ({ children }) => {
   const editJob=async()=>{
     dispatch({type:EDIT_JOB_BEGIN,payload:{isLoading:true}})
     try {
-      const {position,company,jobLocation,jobType,status}=state;
-      await authFetch.patch(`/jobs/${state.editJobId}`,{
-        position,company,jobLocation,jobType,status
+      const {studentFirstName,
+        studentSecondName,
+        logicMark,
+        englishMark,
+        codingMark,
+        englishTest,
+        result,
+        status,
+        interviewLocation,
+        courseType,
+        note}=state;
+      await authFetch.patch(`/interviews/${state.editJobId}`,{
+        studentFirstName,
+        studentSecondName,
+        logicMark,
+        englishMark,
+        codingMark,
+        englishTest,
+        result,
+        status,
+        interviewLocation,
+        courseType,
+        note
       });
 
       dispatch({
@@ -295,11 +355,14 @@ const AppProvider = ({ children }) => {
   const showStats=async()=>{
     dispatch({type:SHOW_STATS_BEGIN});
     try {
-      const {data}= await authFetch('/jobs/stats');
+      const {data}= await authFetch('/interviews/stats');
       dispatch({type:SHOW_STATS_SUCCESS,payload:{
         stats:data.defaultStats,
-        monthlyApplication:data.monthlyApplication
-      }})
+        monthlyApplication:data.monthlyApplication,
+        usersStats:data.usersStats,
+        defaultCityStats:data.defaultCityStats,
+        defaultCourseTypeStats:data.defaultCourseTypeStats
+       }})
     } catch (error) {
       // logoutUser();
     }
@@ -325,13 +388,14 @@ const changePage=(pages)=>{
         handleChange,
         clearValues,
         createInterview,
-        getJobs,
+        getInterviews,
         setEditJob,
         deleteJob,
         editJob,
         showStats,
         clearFilter,
-        changePage
+        changePage,
+        getAdminInterviews
        }}
     >
       {children}

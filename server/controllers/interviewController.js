@@ -361,7 +361,7 @@ const showStats = async (req, res) => {
       try {
         let user = await User.findById(usersStats[i]._id);
         let obj = {
-          _id: user.name,
+          _id: user.name+" "+user.lastName,
           count: usersStats[i].count,
         };
         newArr.push(obj);

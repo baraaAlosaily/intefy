@@ -61,7 +61,7 @@ const AddInterview = () => {
         <FormRow type="number" labelText="logic mark" name="logicMark" value={logicMark} handleChange={handleJobInput} max="10" min="0" />
         <FormRow type="number" labelText="english mark" name="englishMark" value={englishMark} handleChange={handleJobInput} max="10" min="0" />
         <FormRow type="number" labelText="coding mark" name="codingMark" value={codingMark} handleChange={handleJobInput} max="10" min="0" />
-        <FormRow type="number" labelText="english mark" name="englishTest" value={englishTest} handleChange={handleJobInput} max="50" min="0" />
+        <FormRow type="number" labelText="english test" name="englishTest" value={englishTest} handleChange={handleJobInput} max="50" min="0" />
         <FormRowSelect
         value={interviewLocation}
         handleChange={handleJobInput}

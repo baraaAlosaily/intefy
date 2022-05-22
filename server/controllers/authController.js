@@ -14,6 +14,9 @@ const register=async(req,res)=>{
     if(userAlreadyExist){
         throw new BadRequestError("Email is already in use")
     }
+    if(password<6){
+        throw new BadRequestError("Your Password Should Be More Than 6")
+    }
 
     const user =await User.create({name,email,password,lastName,location})
     const token= user.creatJWT();

@@ -4,11 +4,18 @@ import {HiChevronDoubleLeft,HiChevronDoubleRight} from 'react-icons/hi'
 import Wrapper from '../assets/wrappers/PageBtnContainer'
 
 const PageBtnContainer = () => {
-    const{numberOfPages,pages,changePage}=useAppContext(); 
+    const{user,adminNumberOfPages,numberOfPages,pages,changePage}=useAppContext(); 
 
-    const page=Array.from({length:numberOfPages},(_,index)=>{
+    let page=[];
+    if(user&&user.isAdmin){
+      page=Array.from({length:adminNumberOfPages},(_,index)=>{
         return index+1
-    });
+      });
+    }else {
+      page=Array.from({length:numberOfPages},(_,index)=>{
+        return index+1
+      });
+    }
 
     const nextPage=()=>{
         let newPage=pages+1

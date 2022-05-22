@@ -13,8 +13,8 @@ import { CLEAR_ALERT,
     CREATE_INTERVIEW_BEGIN,
     CREATE_INTERVIEW_SUCCESS,
     CREATE_INTERVIEW_ERROR,
-    GET_JOBS_BEGIN,
-    GET_JOBS_SUCCESS,
+    GET_INTERVIEWS_BEGIN,
+    GET_INTERVIEWS_SUCCESS,
     SET_EDIT_JOB,
     DELETE_JOB_BEGIN,
     EDIT_JOB_BEGIN,
@@ -23,7 +23,10 @@ import { CLEAR_ALERT,
     SHOW_STATS_BEGIN,
     SHOW_STATS_SUCCESS,
     CLEAR_FILTER,
-    CHANGE_PAGE
+    CHANGE_PAGE,
+    GET_ADMIN_INTERVIEWS_BEGIN,
+    GET_ADMIN_INTERVIEWS_SUCCESS
+ 
     } from "./action"
 import { initialState } from "./appContext"
 
@@ -173,32 +176,50 @@ const reducer=(state,action)=>{
         } 
     }
 
-    if(action.type===GET_JOBS_BEGIN){
+    if(action.type===GET_INTERVIEWS_BEGIN){
          return {...state,isLoading:true,showAlert:false}
     }
 
-    if(action.type===GET_JOBS_SUCCESS){
+    if(action.type===GET_INTERVIEWS_SUCCESS){
         return {...state,isLoading:false,
-            jobs:action.payload.jobs,
-            totalJobs:action.payload.totalJobs,
+            interviews:action.payload.interviews,
+            totalInterviews:action.payload.totalInterviews,
             numberOfPages:action.payload.numberOfPages,
         }
     }
 
     if(action.type===SET_EDIT_JOB){
-        const job =state.jobs.find((job)=>job._id===action.payload.id);
-        console.log(job)
-        const {_id,position, company,jobLocation,jobType,status}=job;
+        const interview =state.interviews.find((interview)=>interview._id===action.payload.id);
+        console.log(interview)
+        const {_id,studentFirstName,
+            studentSecondName,
+            createdAt,
+            logicMark,
+            englishMark,
+            codingMark,
+            englishTest,
+            result,
+            status,
+            interviewLocation,
+            courseType,
+            note}=interview;
 
         return {
             ...state,
             isEditing:true,
             editJobId:_id,
-            position,
-            company,
-            jobLocation,
-            jobType,
-            status
+            studentFirstName,
+            studentSecondName,
+            createdAt,
+            logicMark,
+            englishMark,
+            codingMark,
+            englishTest,
+            result,
+            status,
+            interviewLocation,
+            courseType,
+            note
         }
     }
 
@@ -242,7 +263,10 @@ const reducer=(state,action)=>{
             ...state,
             isLoading:false,
             stats:action.payload.stats,
-            monthlyApplication:action.payload.monthlyApplication
+            monthlyApplication:action.payload.monthlyApplication,
+            usersStats:action.payload.usersStats,
+            defaultCityStats:action.payload.defaultCityStats,
+            defaultCourseTypeStats:action.payload.defaultCourseTypeStats
         }
     }
     if(action.type===CLEAR_FILTER){
@@ -261,6 +285,18 @@ const reducer=(state,action)=>{
             pages:action.payload.pages
         }
     }
+
+    if(action.type===GET_ADMIN_INTERVIEWS_BEGIN){
+        return {...state,isLoading:true,showAlert:false}
+   }
+
+   if(action.type===GET_ADMIN_INTERVIEWS_SUCCESS){
+       return {...state,isLoading:false,
+        adminInterviews:action.payload.adminInterviews,
+        adminTotalInterviews:action.payload.adminTotalInterviews,
+        adminNumberOfPages:action.payload.adminNumberOfPages,
+       }
+   }
 
     throw new Error(`no such action :${action.type}`)
 }

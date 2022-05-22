@@ -4,6 +4,7 @@ import Profile from "./Profile";
 import SharedLayout from "./SharedLayout";
 import Stats from "./Stats";
 import ProtectedLayout from "../ProtectedLayout";
+import AdminInterviews from "./AdminInterviews";
 
 export{
     AddInterview,
@@ -11,5 +12,6 @@ export{
     Profile,
     SharedLayout,
     Stats,
-    ProtectedLayout
+    ProtectedLayout,
+    AdminInterviews
 }
