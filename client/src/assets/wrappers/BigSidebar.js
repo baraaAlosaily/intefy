@@ -61,6 +61,10 @@ const Wrapper = styled.aside`
     .active .icon {
       color: var(--primary-500);
     }
+    .logo{
+      width:15rem ;
+      margin-left:-3rem ;
+    }
   }
 `
 export default Wrapper

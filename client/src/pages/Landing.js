@@ -6,7 +6,7 @@ import {Logo} from "../components"
 const Landing = () => {
   return (
     <Wrapper>
-      <nav>
+      <nav >
           <Logo/>
       </nav>
       <div className="container page">

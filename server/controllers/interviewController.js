@@ -48,8 +48,8 @@ const createInterview = async (req, res) => {
 
   req.body.createdBy = req.user.userId;
 
-
-
+  const user= await User.findById(req.user.userId);
+  console.log(user)
 
   let finalResult = Math.ceil(
     (Number(logicMark) + Number(englishMark) + Number(codingMark)) / 3
@@ -61,8 +61,10 @@ const createInterview = async (req, res) => {
 
   const interview = await Interviews.create({
     ...req.body,
-    result: finalResult,
+    result:finalResult,
+    username:user.name+" "+user.lastName
   });
+
   res.status(StatusCodes.CREATED).json({ interview });
 };
 const getOwnInterview = async (req, res) => {
@@ -180,7 +182,7 @@ const getAllInterview = async (req, res) => {
     .status(StatusCodes.OK)
     .json({ interviews, totalInterviews, numberOfPages });
 };
-const updateJob = async (req, res) => {
+const updateInterview = async (req, res) => {
   const { id: interivewId } = req.params;
   const {     
     studentFirstName,
@@ -257,10 +259,15 @@ const deleteInterview = async (req, res) => {
 
   await interview.remove();
 
-  res.status(StatusCodes.OK).json({ msg: "Job deleted successfully" });
+  res.status(StatusCodes.OK).json({ msg: "Interview deleted successfully" });
 };
 
 const showStats = async (req, res) => {
+
+  let user = await User.findById(req.user.userId);
+  if (user.isAdmin === false) {
+    throw new unauthenticatedError("You are not authorized to get this data");
+  }
   let stats = await Interviews.aggregate([
     { $group: { _id: "$status", count: { $sum: 1 } } },
     //    {$group:{date:'$createdAt',count:{$sum:1}}}
@@ -318,7 +325,6 @@ const showStats = async (req, res) => {
   };
 
   let monthlyApplication = await Interviews.aggregate([
-    { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
     {
       $group: {
         _id: {
@@ -328,24 +334,30 @@ const showStats = async (req, res) => {
           month: {
             $month: "$createdAt",
           },
+          day: {
+            $dayOfMonth: "$createdAt",
+          },
         },
         count: { $sum: 1 },
       },
     },
-    { $sort: { "_id.year": -1, "_id.month": -1 } },
-    { $limit: 6 },
+    { $sort: { "_id.year": -1, "_id.month": -1,"_id.day": -1 } },
+    { $limit: 10 },
   ]);
+
+  console.log(monthlyApplication);
 
   monthlyApplication = monthlyApplication
     .map((item) => {
       const {
-        _id: { year, month },
+        _id: { year, month,day },
         count,
       } = item;
-      const date = moment()
+      const date = moment().
+         day(day)
         .month(month - 1)
         .year(year)
-        .format("MMM Y");
+        .format("MMM Do YYYY");
 
       return { date, count };
     })
@@ -390,6 +402,6 @@ export {
   createInterview,
   getOwnInterview,
   deleteInterview,
-  updateJob,
+  updateInterview,
   showStats,
 };

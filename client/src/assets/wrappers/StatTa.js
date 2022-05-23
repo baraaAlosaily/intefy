@@ -18,8 +18,8 @@ const Wrapper = styled.article`
   }
   .name {
     display: block;
-    font-weight: 500;
-    font-size: 25px;
+    font-weight: 400;
+    font-size: 20px;
     color: #764B8E;
   }
   .iconName {

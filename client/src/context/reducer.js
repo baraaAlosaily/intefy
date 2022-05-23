@@ -87,7 +87,7 @@ const reducer=(state,action)=>{
             user:null,
             token:null,
             userLocation:null,
-            jobLocation:null
+            interviewLocation:null
         } 
     }
     if(action.type===UPDATE_USER_BEGIN){
@@ -143,13 +143,6 @@ const reducer=(state,action)=>{
         return {
             ...state,
             ...initialState
-            // isEditing:false,
-            // editJobId:'',
-            // position:'',
-            // company:'',
-            // jobLocation: userLocation,
-            // jobType:'full-time',
-            // status:"pending"
         } 
     }
 
@@ -163,7 +156,7 @@ const reducer=(state,action)=>{
             isLoading:false,
             showAlert:true,
             alertType:'success',
-            alertText: 'New Job Created'
+            alertText: 'New Interview Created'
         } 
     }
     if(action.type===CREATE_INTERVIEW_ERROR){
@@ -275,7 +268,10 @@ const reducer=(state,action)=>{
             search:"",
             searchStatus:'all',
             searchType:'all',
+            courseType:'all',
+            locationType:'all',
             sort:'latest',
+
         }
     }
 

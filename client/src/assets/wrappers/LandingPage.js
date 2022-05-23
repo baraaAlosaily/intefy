@@ -15,6 +15,10 @@ const Wrapper = styled.main`
     align-items: center;
     margin-top: -3rem;
   }
+  .logo{
+    margin-left:-4rem ;
+    width:20rem ;
+  }
   h1 {
     font-weight: 700;
     span {

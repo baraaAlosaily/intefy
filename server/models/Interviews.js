@@ -66,6 +66,10 @@ const InterviewSchema= new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:'User',
         required:[true,'Please provide user']
+    },
+    username:{
+            type:String,
+            required:[true,'Please provide user name']
     }
 
 },{timestamps:true})

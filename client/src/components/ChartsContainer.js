@@ -18,7 +18,7 @@ const ChartsContainer = () => {
   }
   return (
     <Wrapper>
-      <h4>Monthly Applications</h4>
+      <h4>Daily Applications</h4>
       <button type='button' onClick={()=>handleChange(barChart)}>{
        !barChart?'Area chart' : 'Bar chart'
        }

@@ -1,4 +1,4 @@
-import logo from "../assets/images/favicon.ico";
+import logo from "../assets/images/logoFour.png";
 
 import React from 'react'
 

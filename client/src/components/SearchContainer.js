@@ -43,21 +43,21 @@ const SearchContainer = () => {
          />
          {/*Rest of values*/}
          <FormRowSelect
-         labelText='job status'
+         labelText='interview status'
          name='searchStatus'
          value={searchStatus}
          handleChange={handleSearch}
          Options={['all',...statusOptions]}
          />
          <FormRowSelect
-         labelText='job type'
+         labelText='course type'
          name='courseType'
          value={courseType}
          handleChange={handleSearch}
          Options={['all',...courseTypeOptions]}
          />
          <FormRowSelect
-         labelText='job type'
+         labelText='location'
          name='locationType'
          value={locationType}
          handleChange={handleSearch}

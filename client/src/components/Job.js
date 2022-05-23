@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
-import {FaLocationArrow,FaBriefcase,FaCalendarAlt,FaLanguage,FaBrain,FaCode} from 'react-icons/fa'
+import {FaLocationArrow,FaBriefcase,FaCalendarAlt,FaLanguage,FaBrain,FaCode,FaChalkboardTeacher} from 'react-icons/fa'
+import {BiNotepad} from "react-icons/bi"
 import {GrLanguage} from 'react-icons/gr'
 import {FcBookmark} from 'react-icons/fc'
 import { Link } from 'react-router-dom'
@@ -19,8 +20,10 @@ const Job = ({_id,studentFirstName,
   status,
   interviewLocation,
   courseType,
-  note}) => {
-    const {setEditJob,deleteJob} =useAppContext();
+  username,
+  note,
+}) => {
+    const {setEditJob,deleteJob,user} =useAppContext();
     let date=moment(createdAt);
     date=date.format('MMM Do,YYYY')
   return (
@@ -37,7 +40,6 @@ const Job = ({_id,studentFirstName,
          <JobInfo icon={<FaLocationArrow/>} text={interviewLocation} />
          <JobInfo icon={<FaCalendarAlt/>} text={date} />
          <JobInfo icon={<FaLanguage/>} text={englishTest} />
-         <JobInfo icon={<FaBriefcase/>} text={result} />
        </div>
         <div className='content-margin'>
            <h5>TA Evaluation</h5>
@@ -46,22 +48,35 @@ const Job = ({_id,studentFirstName,
            <JobInfo icon={<FaBrain/>} text={logicMark} />
            <JobInfo icon={<FaCode/>} text={codingMark} />
            <JobInfo icon={<FcBookmark/>} text={result} />
+           {
+             (user&&user.isAdmin)&&(
+              <JobInfo icon={<FaChalkboardTeacher/>} text={username} />
+             )
+           }
            </div>  
            <div className={`status ${status} content-margin`}>{status}</div>
+           <div>
+            <JobInfo icon={<BiNotepad/>} text="Note" />
+             <p>{note}</p>
+           </div>
         </div>
-     <footer>
-       <div className='actions'>
-       <Link to="/add-interview"
-        className='btn edit-btn'
-        onClick={()=>setEditJob(_id)}
-        >
-         Edit
-       </Link>
-       <button type='button' className='btn delete-btn' onClick={()=>deleteJob(_id)}>
-         Delete
-       </button>
-       </div>
-     </footer>
+        {
+          !user.isAdmin&&(
+            <footer>
+            <div className='actions'>
+            <Link to="/add-interview"
+             className='btn edit-btn'
+             onClick={()=>setEditJob(_id)}
+             >
+              Edit
+            </Link>
+            <button type='button' className='btn delete-btn' onClick={()=>deleteJob(_id)}>
+              Delete
+            </button>
+            </div>
+          </footer>
+          )
+        }
      </div>
    </Wrapper>
 

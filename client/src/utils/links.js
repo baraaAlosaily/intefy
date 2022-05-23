@@ -7,45 +7,39 @@ import {RiAdminFill} from 'react-icons/ri'
 const linksAdmin=[
    {
        id:1,
-       text:'stats',
+       text:'admin',
        path:'/',
+       icon:<RiAdminFill/>
+   },
+   {
+       id:2,
+       text:'stats',
+       path:'stats',
        icon:<IoBarChartSharp/>
    },
    {
-       id:4,
+       id:3,
        text:'profile',
        path:'profile',
        icon:<ImProfile/>
-   },
-   {
-       id:5,
-       text:'admin',
-       path:'admin',
-       icon:<RiAdminFill/>
-   },
+   }
 
 ]
 const links=[
    {
        id:1,
-       text:'stats',
-       path:'/',
-       icon:<IoBarChartSharp/>
-   },
-   {
-       id:2,
        text:'all interviews',
-       path:'all-interviews',
+       path:'/',
        icon:<MdQueryStats/>
    },
    {
-       id:3,
+       id:2,
        text:'add interview',
        path:'add-interview',
        icon:<FaWpforms/>
    },
    {
-       id:4,
+       id:3,
        text:'profile',
        path:'profile',
        icon:<ImProfile/>

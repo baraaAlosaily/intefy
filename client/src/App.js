@@ -11,38 +11,40 @@ import {
   AdminInterviews
 } from "./pages/dashboard"
 
+
+
 const App=()=> {
   const {user}=useAppContext();
   return (
   <BrowserRouter>
   <Routes>
       {
-        (user&&user.isAdmin)?(
+        (user?.isAdmin)?(
           <>
-              <Route path="/" element={
+            <Route path="/" element={
               <ProtectedLayout>
               <SharedLayout/>
               </ProtectedLayout>
               }>
-              <Route index element={<Stats/>}/>
+              <Route index element={<AdminInterviews/>}/>
+              <Route path="stats" element={<Stats/>}/>
               <Route path="profile" element={<Profile/>}/>
-              <Route path="admin" element={<AdminInterviews/>}/>
-              </Route>
-          </>
-        ):(
-          <>
-              <Route path="/" element={
-              <ProtectedLayout>
-              <SharedLayout/>
-              </ProtectedLayout>
-              }>
-              <Route index element={<Stats/>}/>
-              <Route path="profile" element={<Profile/>}/>
-              <Route path="all-interviews" element={<AllJobs/>}/>
-              <Route path="add-interview" element={<AddInterview/>}/>
               </Route>
           </>
         )
+        :(
+          <> 
+          <Route path="/" element={
+            <ProtectedLayout>
+            <SharedLayout/>
+            </ProtectedLayout>
+            }>
+              <Route index element={<AllJobs/>}/>
+              <Route path="profile" element={<Profile/>}/>
+              <Route path="add-interview" element={<AddInterview/>}/>
+              </Route>
+              </>
+          )
       }
     <Route path="/register" element={<Register/>} />
     <Route path="/landing" element={<Landing/>}/>
