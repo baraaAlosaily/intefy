@@ -9,9 +9,12 @@ import {
 import checkPermissions from "../utils/checkPermission.js";
 import mongoose from "mongoose";
 import moment from "moment";
+import axios from "axios";
 import User from "../models/User.js";
 
 const createInterview = async (req, res) => {
+
+  
   const {
     studentFirstName,
     studentSecondName,
@@ -68,6 +71,8 @@ const createInterview = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ interview });
 };
 const getOwnInterview = async (req, res) => {
+  await axios.get('https://script.google.com/macros/s/AKfycbzlcAH2QSSj4vHkDxQyN0DusCU9PLoRJEi_4MTTkWsPxQR5v3WIKLk-c2y6R_GRfs6W/exec');
+
   const { status, interviewLocation, courseType, sort, search } = req.query;
 
   let queryObject = {
@@ -123,6 +128,7 @@ const getOwnInterview = async (req, res) => {
 };
 
 const getAllInterview = async (req, res) => {
+  
   const { status, interviewLocation, courseType, sort, search } = req.query;
 
   let queryObject = {};
