@@ -26,7 +26,7 @@ import authenticateUser from './middleware/auth.js'
 if(process.env.NODE_ENV!=="production"){
     app.use(morgan('dev'))
 }
-app.use(cors());
+app.use(cors('*'));
 app.use(express.json());
 app.use(helmet());
 app.use(xss());

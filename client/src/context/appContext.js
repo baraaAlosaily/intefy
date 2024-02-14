@@ -47,6 +47,7 @@ const removeUserFromLocalStorage = () => {
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
 const userLocation = localStorage.getItem("location");
+const URL=process.env.REACT_APP_BASE_URL||'https://intefy-server.azurewebsites.net';
 
 const initialState = {
   isLoading: false,
@@ -102,7 +103,7 @@ const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const authFetch= axios.create({
-    baseURL:`${process.env.REACT_APP_BASE_URL}/api/v1`
+    baseURL:`${URL}/api/v1`
   })
 
   //request 
@@ -141,7 +142,7 @@ const AppProvider = ({ children }) => {
   const setupUser = async ({currentUser,endPoint,alertText}) => {
     dispatch({ type: SETUP_USER_BEGIN });
     try {
-      const { data } = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/${endPoint}`, currentUser);
+      const { data } = await axios.post(`${URL}/api/v1/auth/${endPoint}`, currentUser);
       const { user, token, location } = data;
       dispatch({
         type: SETUP_USER_SUCCESS,
