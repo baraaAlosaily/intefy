@@ -47,7 +47,7 @@ const removeUserFromLocalStorage = () => {
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
 const userLocation = localStorage.getItem("location");
-const URL=process.env.REACT_APP_BASE_URL||'https://intefy-server.azurewebsites.net';
+const URL=process.env.REACT_APP_BASE_URL
 
 const initialState = {
   isLoading: false,
